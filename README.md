@@ -188,3 +188,54 @@ end
 ```
 
 The part of the module type that is written `sig (* declarations *) end` is called a signature. A signature is simply a sequence of declarations
+
+# 15. `ignore` function
+
+Used to ignore the return value. Ignore is a function that takes a polymorphic param and returns unit (`val ignore -> 'a -> unit`)
+
+```ocaml
+let addTwo x y =
+  x + y
+
+ignore (addTwo 2 2)
+```
+
+# 16. `mutable` keyword
+
+The mutable keyword makes a record field changeable
+
+```ocaml
+type counter = { mutable value : int }
+
+let c = { value = 0 }
+
+c.value <- 1
+```
+
+# 17. `ref` type
+
+A ref is like a pointer or reference in an imperative language. It is a location in memory whose contents may change. Refs are also called ref cells, the idea being that there's a cell in memory that can change.
+
+Syntax:
+
+- Ref creation: `ref e`
+
+- Ref assignment: `e1 := e2`
+
+- Dereference: `!e`
+
+# 18. Physical Equality
+
+OCaml has two equality operators, physical equality and structural equality. The documentation of `==` explains physical equality:
+
+    e1 == e2 tests for physical equality of e1 and e2. On mutable types such as references, arrays, byte sequences, records with mutable fields and objects with mutable instance variables, e1 == e2 is true if and only if physical modification of e1 also affects e2. On non-mutable types, the behavior of ( == ) is implementation-dependent; however, it is guaranteed that e1 == e2 implies compare e1 e2 = 0.
+
+One interpretation could be that == should be used only when comparing refs (and other mutable data types) to see whether they point to the same location in memory. Otherwise, don't use ==.
+
+Structural equality is also explained in the documentation of `=`:
+
+    e1 = e2 tests for structural equality of e1 and e2. Mutable structures (e.g. references and arrays) are equal if and only if their current contents are structurally equal, even if the two mutable objects are not the same physical object. Equality between functional values raises Invalid_argument. Equality between cyclic data structures may not terminate.
+
+# 19. Command Line Arguments
+
+Just use `Sys.argv` to retrieve them
