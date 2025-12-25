@@ -239,3 +239,18 @@ Structural equality is also explained in the documentation of `=`:
 # 19. Command Line Arguments
 
 Just use `Sys.argv` to retrieve them
+
+# 20. Arrays vs Lists
+
+| Feature           | List (`'a list`)                           | Array (`'a array`)                                 |
+| ----------------- | ------------------------------------------ | -------------------------------------------------- |
+| **Syntax**        | `[1; 2; 3]`                                | `[\|1; 2; 3\|]`                                    |
+| **Mutability**    | Immutable                                  | Mutable                                            |
+| **Access**        | O(n) (linear time)                         | O(1) (constant time)                               |
+| **Update**        | Creates a new list with updated value      | Directly modify element: `arr.(0) <- 10`           |
+| **Length**        | O(n) (linear time)                         | O(1) (constant time)                               |
+| **Memory layout** | Linked list (nodes with head/tail)         | Contiguous memory block                            |
+| **Appending**     | Expensive: O(n) for `@`                    | Expensive for resizing (fixed size)                |
+| **Iteration**     | `List.map`, `List.iter`                    | `Array.map`, `Array.iter`                          |
+| **Use case**      | Good for recursion, functional programming | Good for indexed access, performance-critical code |
+| **Example**       | `let l = [1;2;3]`                          | `let a = [\|1;2;3\|]`                              |
