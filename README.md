@@ -254,3 +254,76 @@ Just use `Sys.argv` to retrieve them
 | **Iteration**     | `List.map`, `List.iter`                    | `Array.map`, `Array.iter`                          |
 | **Use case**      | Good for recursion, functional programming | Good for indexed access, performance-critical code |
 | **Example**       | `let l = [1;2;3]`                          | `let a = [\|1;2;3\|]`                              |
+
+# 21. Functors
+
+A functor has a module as a parameter and returns a module as a result. A functor in OCaml is a parametrised module.
+
+`functions` take values -> return values
+
+`functors` take modules -> return modules
+
+## 1. Syntax
+
+```ocaml
+module F (M : S) = struct
+  ...
+end
+```
+
+OR
+
+```ocaml
+module F = functor (M : S) -> struct
+  ...
+end
+```
+
+The second form uses the `functor` keyword to create an anonymous functor, like how the `fun` keyword creates an anonymous function.
+
+The syntax for writing down the type of a functor. Here is the type of a functor that takes a structure matching signature Si as input and returns a structure matching So:
+
+```ocaml
+functor (M : Si) -> So
+```
+
+They are like `templates in C++` over a class. This way we can generate multiple classes out of 1 class.
+
+## 22. Hash Table
+
+https://courses.cs.cornell.edu/cs3110/2021sp/textbook/eff/map_hash.html
+
+## 23. Fixed Point Number
+
+A fixed-point number is an integer that we agree to interpret as having a fixed number of bits after the decimal point. No floating point hardware. No rounding surprises. Just integers + a convention.
+
+1. Suppose we decide 4 fractional bits, that means:
+
+   The last 4 bits are "after the decimal point"
+
+   Scaling factor = 2^4 = 16
+
+   So the integer value is:
+
+   ```
+   scaling = 16
+   real_value = stored_int / scaling
+
+   16 / scaling = 1.0
+   24 / scaling = 1.5
+   8 / scaling	= 0.5
+   1 / scaling = 0.0625
+   ```
+
+   From integer to fixed:
+
+   ```
+   scaling = 16
+   stored_int = real_value * scaling
+
+   1.0 * scaling = 16
+   1.5 * scaling = 24
+   0.5 * scaling = 8
+   ```
+
+https://c2s2.engineering.cornell.edu/blogposts/FA23/RepresentingNumbersInHardware
