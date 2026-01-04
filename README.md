@@ -327,3 +327,66 @@ A fixed-point number is an integer that we agree to interpret as having a fixed 
    ```
 
 https://c2s2.engineering.cornell.edu/blogposts/FA23/RepresentingNumbersInHardware
+
+# 24. Classes
+
+```ocaml
+class student name =
+  object
+    val _name : string = name
+    val mutable _age = 0
+
+    method get_age = _age
+    method get_name = _name
+    method birthday x = _age <- x
+    method to_string =  _name ^ " : " ^ (string_of_int age)
+  end
+
+let () =
+  let marvin = new student ("Marvin") in
+  marvin#birthday 42;
+  print_endline marvin#to_string
+```
+
+**Self keyword** - used to call methods of the class inside the class
+
+```ocaml
+class student name =
+  object(self)
+    val _name : string = name
+
+    method private get_name = name
+    method to_string = self#get_name
+  end
+
+```
+
+**Initializer** - runs when an object is created, after fields are initialized but before the object is returned
+
+```ocaml
+class counter start =
+  object
+    val mutable x = start
+
+    initializer Printf.printf "Counter created with %d\n" x
+
+    method inc = x <- x + 1
+    method get = x
+  end
+```
+
+**Parametrized classes** - generic classes
+
+```ocaml
+class ['a, 'b] pair (x: 'a) (y: 'b) =
+  object
+    val _x = x
+    val _y = y
+
+    method first = _x
+    method second = _y
+  end
+
+let () =
+  let p = new pair 42 "Foo"
+```
