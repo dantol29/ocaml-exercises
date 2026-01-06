@@ -348,7 +348,7 @@ let () =
   print_endline marvin#to_string
 ```
 
-**Self keyword** - used to call methods of the class inside the class
+**Self** - used to call methods of the class inside the class (can be any word, not only self)
 
 ```ocaml
 class student name =
@@ -389,4 +389,56 @@ class ['a, 'b] pair (x: 'a) (y: 'b) =
 
 let () =
   let p = new pair 42 "Foo"
+```
+
+**Inheritance** - classic
+
+```ocaml
+class car n =
+  object
+    val name = n
+    method start = print_endline "Brooom!"
+  end
+
+(* just inherits everything *)
+class bmw n =
+  object
+    inherit car n
+  end
+
+(* overwrites inherited method *)
+class honda n =
+  object
+    inherit car n as super
+    method start =
+      super#start;
+      print_endline "Honda sounds..."
+  end
+
+(* multiple inheritance *)
+class my_car n =
+  object
+    inherit car n as c
+    inherit honda n as b
+  end
+
+let () =
+  (* which start method is going to be called? car's or hondas? *)
+  (* answer: honda because the last inheritance is used *)
+  my_car#start
+```
+
+**Virtual** - defined but not implemented, enforces implementation if inherited
+
+```ocaml
+class virtual hat =
+  object
+    method virtual wear: unit
+  end
+
+class virtual cap =
+  object
+    inherit hat
+    method wear = ()
+  end
 ```
