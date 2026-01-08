@@ -1,11 +1,13 @@
 let ft_string_all (func : char -> bool) (str: string) : bool =
   let rec aux (i : int) : bool =
-    if i >= 0 then begin
-      if func (String.get str i) then
-       aux (i - 1) 
-      else
+    if i >= 0 then (
+      if func (String.get str i) then 
+        aux (i - 1) 
+      else 
         false
-    end else true
+    )
+    else 
+      true
   in
 
   aux (String.length str - 1)

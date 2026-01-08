@@ -10,7 +10,7 @@ let ft_print_rev (str : string) : unit =
   print_char '\n'
 
 let () =
-  ft_print_rev ("Hello!");
+  ft_print_rev ("Hello world !");
   ft_print_rev ("")
 
 

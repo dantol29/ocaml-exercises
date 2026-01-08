@@ -1,11 +1,13 @@
 let ft_is_palindrome (str: string) : bool = 
   let rec aux start ending =
-    if start < ending then begin
+    if start < ending then (
       if (String.get str start) = (String.get str ending) then
        aux (start + 1) (ending - 1)
       else
         false
-    end else true
+    ) 
+    else 
+      true
   in
 
   aux 0 (String.length str - 1)
