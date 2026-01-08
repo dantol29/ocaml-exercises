@@ -38,10 +38,12 @@ class ethane =
     inherit Alkane.alkane "Ethane" 2
   end
 
-class octane =
+class butane =
   object
-    inherit Alkane.alkane "Octane" 8
+    inherit Alkane.alkane "Butane" 4
   end
+
+let is_integer x = abs_float (x -. Float.trunc x) < 1e-9        
 
 class alkane_combustion (alkanes: Alkane.alkane list) =
   object(self)
@@ -71,23 +73,35 @@ class alkane_combustion (alkanes: Alkane.alkane list) =
       let start_atoms = count_atoms start in
       print_string "-> ";
       let result_atoms = count_atoms result in
-      Printf.printf "\n= %d and %d\n" start_atoms result_atoms;
+      Printf.printf "= %d and %d\n" start_atoms result_atoms;
       start_atoms = result_atoms
 
+    (* formula: CnH2n+2 + (3n+1)/2 02 -> nCO2 + (n+1)H2O (where n = carbon count) *)
     method balance =
-      let total_carbon = 
-        List.fold_left (fun acc (alkane: Alkane.alkane) -> acc + (self#carbon_count alkane)) 0 alkanes
+      let formula alkane =
+        let carbon = self#carbon_count alkane in
+        let o2 = ((3.0 *. float_of_int carbon +. 1.0)) /. 2.0 in
+        let co2 = carbon in
+        let h2o = carbon + 1 in
+        Printf.printf "%s + %fO2 -> %dCO2 + %dH2O\n" alkane#formula o2 co2 h2o;
+        (o2, co2, h2o)
       in
 
-      let multiply = if total_carbon mod 2 <> 0 then 1 else 2 in
+      let (o2, co2, h2o) = 
+        List.fold_right 
+        (fun alkane (o2, co2, h2o) -> (
+          let (new_o2, new_co2, new_h2o) = formula alkane in
+          (new_o2 +. o2, new_co2 + co2, new_h2o + h2o)
+        )) 
+        alkanes (0.0, 0, 0) 
+      in
 
-      let alkane_coeff = multiply in
-      let co2_coeff = total_carbon * multiply in
-      let h2o_coeff = (total_carbon + 1) * multiply in
-      let o2_coeff = ((3 * total_carbon + 1) * multiply) / 2 in
-      
-      start <- (List.map (fun alk -> (alk, alkane_coeff)) alkanes) @ [(new oxygen_m, o2_coeff)];
-      result <- [(new carbon_dioxide, co2_coeff); (new water, h2o_coeff)];
+      Printf.printf "alkanes + %fO2 -> %dCO2 + %dH2O\n" o2 co2 h2o;
+      let scale = if is_integer o2 then 1 else 2 in
+  
+      start <- (List.mapi (fun i alk -> (alk, scale)) alkanes) 
+        @ [(new oxygen_m, int_of_float (o2 *. float_of_int scale))];
+      result <- [(new carbon_dioxide, co2 * scale); (new water, h2o * scale)];    
       (self :> alkane_combustion)
     
     method private carbon_count alk = 
@@ -97,13 +111,18 @@ class alkane_combustion (alkanes: Alkane.alkane list) =
   end
 
 let () = 
-  let a = new alkane_combustion [new methane] in
-  Printf.printf "%B\n" a#is_balanced;
+  let a = new alkane_combustion [new methane; new ethane; new methane; new butane] in
+  Printf.printf "%B\n\n" a#is_balanced;
 
   let a = a#balance in
+  print_newline ();
+
   Printf.printf "%B\n" a#is_balanced;
   
+  print_newline ();
   List.iter (fun (m, c) -> Printf.printf "%d%s " c m#formula) a#get_start;
   print_string "-> ";
   List.iter (fun (m, c) -> Printf.printf "%d%s " c m#formula) a#get_result;
   print_newline ()
+
+(* https://www.omnicalculator.com/chemistry/combustion-reaction *)
