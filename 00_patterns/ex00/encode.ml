@@ -17,17 +17,17 @@ let encode (l : 'a list): (int * 'a) list =
 
 let () =
   let result = encode (['a'; 'a'; 'a'; 'b'; 'b'; 'b'; 'c']) in
-  List.iter (fun (x, y) -> Printf.fprintf stdout "(%d, %c) " x y) result;
+  List.iter (fun (x, y) -> Printf.printf "(%d, %c) " x y) result;
   print_newline ();
 
   let result = encode ([1; 1; 1; 2; 2; 2; 3]) in
-  List.iter (fun (x, y) -> Printf.fprintf stdout "(%d, %d) " x y) result;
+  List.iter (fun (x, y) -> Printf.printf "(%d, %d) " x y) result;
   print_newline ();
 
   let result = encode ([1]) in
-  List.iter (fun (x, y) -> Printf.fprintf stdout "(%d, %d) " x y) result;
+  List.iter (fun (x, y) -> Printf.printf "(%d, %d) " x y) result;
   print_newline ();
 
   let result = encode ([]) in
-  List.iter (fun (x, y) -> Printf.fprintf stdout "(%d, %d) " x y) result;
+  List.iter (fun (x, y) -> Printf.printf "(%d, %d) " x y) result;
   print_newline ()

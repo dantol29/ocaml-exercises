@@ -4,10 +4,8 @@ let crossover (l1: 'a list) (l2: 'a list): 'a list =
       match l with
       | [] -> false
       | head :: tail -> (
-        if head = elem then
-          true
-        else
-          contains tail elem
+        if head = elem then true
+        else contains tail elem
       )
     in
 
@@ -53,4 +51,8 @@ let () =
 
   let result = crossover [1; 1; 2; 3] [1; 2; 2; 2] in
   List.iter print_int result;
+  print_newline ();
+
+  let result = crossover ['a'; 'b'; 'c'] ['a'; 'b'; 'c'] in
+  List.iter print_char result;
   print_newline ();
