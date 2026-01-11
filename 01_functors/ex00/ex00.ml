@@ -1,5 +1,4 @@
 (* functor creates a new module *)
-(* in C++ would be std::list<string> *)
 module StringSet = Set.Make(String)
 
 let () =

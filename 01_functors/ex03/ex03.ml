@@ -35,9 +35,8 @@ end
 module type MAKE = functor (X : FRACTIONNAL_BITS) -> FIXED
 
 (* 
-  functor body
-  fixed-point number
-  stored as: x = X_real * 2^bits
+  functor 
+  fixed-point number - stored as: x = X_real * 2^bits
 *)
 module Make : MAKE = functor (X : FRACTIONNAL_BITS) -> 
 struct

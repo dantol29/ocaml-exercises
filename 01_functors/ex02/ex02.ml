@@ -1,16 +1,14 @@
-(* interface *)
 module type PAIR = 
 sig 
   val pair : (int * int)
 end
 
-(* interface *)
 module type VAL = 
 sig 
   val x : int 
 end
 
-(* module that implements PAIR *)
+(* implements PAIR *)
 module Pair : PAIR = 
 struct 
   let pair = ( 21, 42 ) 

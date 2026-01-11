@@ -456,6 +456,7 @@ end
 ```
 
 it is better to express `bind` as
+
 ```ocaml
 val (>>=) : 'a t -> ('a -> 'b t) -> 'b t
 ```
@@ -463,3 +464,16 @@ val (>>=) : 'a t -> ('a -> 'b t) -> 'b t
 # 26. Monoids
 
 ugh, later maybe
+
+# 27. Sharing Constraints
+
+if T is a module type containing an abstract type t, then `T with type t = int` is a new module type that is the same as T, except that t is known to be int.
+
+```ocaml
+module type T = sig
+  type t
+  val x : t
+end
+
+module type T_int = T with type t = int
+```

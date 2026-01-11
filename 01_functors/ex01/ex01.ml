@@ -13,8 +13,6 @@ struct
     in
 
     aux 0 5381
-    
-
 end
 
 module StringHashtbl = Hashtbl.Make(MyHash)
