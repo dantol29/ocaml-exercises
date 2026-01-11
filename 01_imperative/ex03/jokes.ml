@@ -12,8 +12,8 @@ let () =
   with
   | End_of_file -> (
     Random.self_init ();
-    let r = Random.int (Array.length !jokes) in
-    print_endline (Array.get !jokes r)
+    let i = Random.int (Array.length !jokes) in
+    print_endline (Array.get !jokes i)
   );
 
   close_in file;

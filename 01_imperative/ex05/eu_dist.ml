@@ -14,9 +14,13 @@ let eu_dist (x: float array) (y: float array) : float =
   sqrt !acc
 
 let () = 
-  assert (0.0 = (eu_dist [|1.0; 2.0; 3.0|] [|1.0; 2.0; 3.0|]));
-  assert (5.0 = (eu_dist [|0.0; 0.0|] [|3.0; 4.0|]));
-  assert (3.0 = (eu_dist [|2.0|] [|5.0|]))
-
-
-
+  try
+    assert (0.0 = (eu_dist [|1.0; 2.0; 3.0|] [|1.0; 2.0; 3.0|]));
+    assert (5.0 = (eu_dist [|0.0; 0.0|] [|3.0; 4.0|]));
+    assert (3.0 = (eu_dist [|2.0|] [|5.0|]));
+    assert ((sqrt 27.0) = (eu_dist [|0.0;0.0;0.0|] [|3.0;3.0;3.0|]));
+    assert ((sqrt 18.0) = (eu_dist [| -1.0; -1.0 |] [|2.0; 2.0|]))
+  with
+  | Invalid_argument msg -> print_endline msg
+  | Assert_failure (msg, d1, d2) -> 
+    Printf.printf "%s: %d, %d\n" msg d1 d2
