@@ -124,10 +124,10 @@ let getColor ((x, _): t) =
   x
 
 let toString ((x, y): t) = 
-  Color.toString x ^ Value.toString y
+  Printf.sprintf "%s%s" (Color.toString x) (Value.toString y)
 
 let toStringVerbose ((x, y): t) = 
-  "Card (" ^ Color.toStringVerbose x ^ ", " ^ Value.toStringVerbose y ^ ")"
+  Printf.sprintf "Card(%s, %s)" (Color.toStringVerbose x) (Value.toStringVerbose y)
 
 let compare ((_, x): t) ((_, y): t) = 
   Value.toInt x  - Value.toInt y
@@ -150,23 +150,14 @@ let min (x: t) (y: t) =
   if v1 <= v2 then x
   else y
 
-let best (l: t list) =
-  let rec aux (lst: t list) (best: t) =
-    match lst with
-    | [] -> best
-    | head :: tail -> (
-      let (_, value) = head in
-      let (_, best_value) = best in
-      if Value.toInt value > Value.toInt best_value then
-        aux tail head
-      else
-        aux tail best
-    )
-  in
-
+let best (l: t list) : t =
   match l with
   | [] -> invalid_arg "Empty list"
-  | head :: tail -> aux tail head
+  | head :: tail -> (
+      List.fold_left
+      (fun best curr -> if Value.toInt (snd curr) > Value.toInt (snd best) then curr else best) 
+      head tail
+  )
 
 let isOf ((x, _): t) color = 
   color = x
