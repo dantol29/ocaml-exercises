@@ -1,5 +1,3 @@
-type clock = One | Two
-
 module Watchtower :
 sig
   type hour = int

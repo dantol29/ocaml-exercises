@@ -463,7 +463,31 @@ val (>>=) : 'a t -> ('a -> 'b t) -> 'b t
 
 # 26. Monoids
 
-ugh, later maybe
+A **monoid** is a set `M` equipped with a **binary operation** (a function that combines two elements of `M` and returns another element of `M`) and an **identity element**. The identity element (sometimes called `zero`) must be part of `M` and satisfy the rule: `e * a = a * e = a` for every `a` in `M`, where `e` is the identity element.
+
+The binary operation must also be **associative**, meaning for all `a, b, c` in `M`: `(a * b) * c = a * (b * c)`
+
+## Examples
+
+1. **Integers under addition**
+
+   - Set: `Z` (all integers)
+   - Operation: `+`
+   - Identity element: `0`
+   - Reason: `0 + a = a + 0 = a` and addition is associative.
+
+2. **Integers under multiplication**
+
+   - Set: `Z` (all integers)
+   - Operation: `*`
+   - Identity element: `1`
+   - Reason: `1 * a = a * 1 = a` and multiplication is associative.
+
+3. **Strings under concatenation**
+   - Set: all strings
+   - Operation: concatenation
+   - Identity element: `""` (empty string)
+   - Reason: `"" ^ s = s ^ "" = s` and concatenation is associative.
 
 # 27. Sharing Constraints
 
