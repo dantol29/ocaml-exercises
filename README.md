@@ -443,29 +443,65 @@ class virtual cap =
   end
 ```
 
-# 25. Monads
+# 25. Semigroups
 
-Monad signature
+A semigroup is:
 
-```ocaml
-module type Monad = sig
-  type 'a t
-  val return : 'a -> 'a t
-  val bind : 'a t -> ('a -> 'b t) -> 'b t
-end
+1. a set of values
+2. an associative binary operation
+
+Associative binary operation is an operation that:
+
+1. Takes tow inputs of the same type (binary)
+2. Returns the same result regardless of how you group the operations (associative)
+
+Associative:
+
+1. The grouping can change, the order cannot
+2. An example: `(a * b) * c = a * (b * c)`
+
+## Why association matters? **Parallel computation**
+
+Suppose you want to combine many values
+
+```
+a * b * c * d * e * f
 ```
 
-it is better to express `bind` as
+On a single CPU, you might do:
 
-```ocaml
-val (>>=) : 'a t -> ('a -> 'b t) -> 'b t
 ```
+((((a * b) * c) * d) * e) * f
+```
+
+But in **multiple CPUs**, you want to split the work
+
+## How parallelism works?
+
+Divide the data into chunks and compute each chunk independently
+
+```
+CPU 1: (a * b)
+CPU 2: (c * d)
+CPU 3: (e * f)
+Then combine results: (a * b) * (c * d) * (e * f)
+```
+
+Associativity guarantees that any parenthesiz grouping is valid, so no coordination needed about grouping
 
 # 26. Monoids
 
-A **monoid** is a set `M` equipped with a **binary operation** (a function that combines two elements of `M` and returns another element of `M`) and an **identity element**. The identity element (sometimes called `zero`) must be part of `M` and satisfy the rule: `e * a = a * e = a` for every `a` in `M`, where `e` is the identity element.
+A monoid is:
 
-The binary operation must also be **associative**, meaning for all `a, b, c` in `M`: `(a * b) * c = a * (b * c)`
+1. a semigroup
+2. plus an identity element
+
+Identity element(e) is an element that:
+
+1. changes nothing under the operation (`e * a = a * e = a`)
+2. defines the result of zero uses of the operation
+
+In parallel computation some partitions may be empty, some workers may fail, results may be missing. Identity element allows to handle zero/empty cases
 
 ## Examples
 
@@ -489,7 +525,25 @@ The binary operation must also be **associative**, meaning for all `a, b, c` in 
    - Identity element: `""` (empty string)
    - Reason: `"" ^ s = s ^ "" = s` and concatenation is associative.
 
-# 27. Sharing Constraints
+# 27. Monads
+
+A monad is a design pattern that lets you chain computations while hiding the handling of context
+
+```ocaml
+module type Monad = sig
+  type 'a t
+  val return : 'a -> 'a t
+  val bind : 'a t -> ('a -> 'b t) -> 'b t
+end
+```
+
+it is better to express `bind` as
+
+```ocaml
+val (>>=) : 'a t -> ('a -> 'b t) -> 'b t
+```
+
+# 28. Sharing Constraints
 
 if T is a module type containing an abstract type t, then `T with type t = int` is a new module type that is the same as T, except that t is known to be int.
 
